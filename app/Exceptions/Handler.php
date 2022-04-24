@@ -155,10 +155,10 @@ class Handler extends ExceptionHandler
         $log->pushHandler(new StreamHandler($logfile, Logger::WARNING));
 
         $error_log = 
-        '['.$status.']['.$_SERVER['REMOTE_ADDR'].']['.$method.']['.$route.']['.$exception->getMessage().']'
+        '['.$status.']['.$_SERVER['REMOTE_ADDR'].']['.$method.']['.$route.']'
         ;
 
-        $log->error($error_log);
+        $log->error($error_log,[$exception->getMessage()]);
 
         return response()->json($error, $status);
 
