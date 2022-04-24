@@ -4,6 +4,8 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 
 class Handler extends ExceptionHandler
 {
@@ -97,6 +99,8 @@ class Handler extends ExceptionHandler
 
         $route = $request->path();
 
+        $method = $request->method();
+
         switch ($code) {
             case 1:
             case 2:
@@ -133,11 +137,28 @@ class Handler extends ExceptionHandler
 
         $error = [
             "error" => [
-                "message" => $message,
+                "message" => strpos($message, 'SQLSTATE') === false ? $message : 'Erro Interno no Servidor',
                 "code" => $code,
                 "debug" => $debug
             ]
         ];
+
+        // create a log channel
+        $log = new Logger(getEnv('APP_CLIENT_NAME'));
+
+        $logDate = new \DateTime();
+
+        $logDate = $logDate->format('Y-m-d');
+
+        $logfile = base_path() . '/logs/'.$logDate.'-'.getEnv('APP_CLIENT_NAME').'.log';
+
+        $log->pushHandler(new StreamHandler($logfile, Logger::WARNING));
+
+        $error_log = 
+        '['.$status.']['.$_SERVER['REMOTE_ADDR'].']['.$method.']['.$route.']['.$exception->getMessage().']'
+        ;
+
+        $log->error($error_log);
 
         return response()->json($error, $status);
 
