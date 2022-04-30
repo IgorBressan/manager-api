@@ -2,17 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class Employee extends Authenticatable implements JWTSubject
+class Manager extends Authenticatable implements JWTSubject
 {
     use HasFactory, Notifiable;
 
-    protected $table = 'employee';
+    protected $table = 'manager';
 
     /**
      * The attributes that are mass assignable.

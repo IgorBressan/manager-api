@@ -13,5 +13,5 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
-/logs/*
-!/logs/.gitkeep
+/storage/logs/*
+!/storage/logs/.gitkeep

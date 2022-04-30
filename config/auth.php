@@ -45,9 +45,9 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
-        'employee' => [
+        'manager' => [
             'driver' => 'jwt',
-            'provider' => 'employee',
+            'provider' => 'manager',
             'hash' => false,
         ],
     ],
@@ -74,9 +74,9 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
-        'employee' => [
+        'manager' => [
             'driver' => 'eloquent',
-            'model' => App\Models\Employee::class,
+            'model' => App\Models\Manager::class,
         ],
 
         // 'users' => [
@@ -107,8 +107,8 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
-        'employee' => [
-            'provider' => 'employee',
+        'manager' => [
+            'provider' => 'manager',
             'table' => 'password_resets',
             'expire' => 60,
             'throttle' => 60,

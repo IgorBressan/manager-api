@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Models\Employee;
+use App\Models\Manager;
 use Validator;
 
-class AuthEmployeeController extends Controller
+class AuthManagerController extends Controller
 {
      /**
      * Create a new AuthController instance.
@@ -14,7 +13,7 @@ class AuthEmployeeController extends Controller
      * @return void
      */
     public function __construct() {
-        $this->middleware('auth:employee', ['except' => ['login', 'register']]);
+        $this->middleware('auth:manager', ['except' => ['login', 'register']]);
     }
     /**
      * Get a JWT via given credentials.
@@ -23,6 +22,7 @@ class AuthEmployeeController extends Controller
      */
     public function login(Request $request)
     {
+
     	$validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required|string|min:6',
@@ -42,7 +42,7 @@ class AuthEmployeeController extends Controller
 
         }
 
-        if (! $token = auth('employee')->attempt($validator->validated())) {
+        if (! $token = auth('manager')->attempt($validator->validated())) {
 
             throw new \Exception("O e-mail ou senha informados estão incorretos", 401);
 
@@ -77,12 +77,12 @@ class AuthEmployeeController extends Controller
             }
         }
 
-        $user = Employee::create(array_merge(
+        $user = Manager::create(array_merge(
                     $validator->validated(),
                     ['password' => bcrypt($request->password)]
                 ));
 
-        $token = auth('employee')->attempt($validator->validated());
+        $token = auth('manager')->attempt($validator->validated());
 
         return $this->createNewToken($token);
 
@@ -94,7 +94,7 @@ class AuthEmployeeController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function logout() {
-        auth('employee')->logout();
+        auth('manager')->logout();
         return response()->json(['res' => 'Usuário deslogado com sucesso!']);
     }
     /**
@@ -103,7 +103,7 @@ class AuthEmployeeController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function refresh() {
-        return $this->createNewToken(auth('employee')->refresh());
+        return $this->createNewToken(auth('manager')->refresh());
     }
     /**
      * Get the authenticated User.
@@ -111,7 +111,7 @@ class AuthEmployeeController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function userProfile() {
-        return response()->json(['res'=>auth('employee')->user()]);
+        return response()->json(['res'=>auth('manager')->user()]);
     }
     /**
      * Get the token array structure.
@@ -125,8 +125,8 @@ class AuthEmployeeController extends Controller
             'res' => [
                 'access_token' => $token,
                 'token_type' => 'bearer',
-                'expires_in' => auth('employee')->factory()->getTTL() * 60,
-                'user' => auth('employee')->user()
+                'expires_in' => auth('manager')->factory()->getTTL() * 60,
+                'user' => auth('manager')->user()
             ]
         ]);
     }

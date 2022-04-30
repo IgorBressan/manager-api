@@ -108,6 +108,11 @@ class Handler extends ExceptionHandler
             case 4:
                 $status = 500;
                 break;
+            case 23000:
+                //TODO - Validar inconsistência
+                $status = 409;
+                $message = "Erro ao registrar no banco de dados";
+                break;
             default:
                 $status = 409;
         }
@@ -150,7 +155,7 @@ class Handler extends ExceptionHandler
 
         $logDate = $logDate->format('Y-m-d');
 
-        $logfile = base_path() . '/logs/'.$logDate.'-'.getEnv('APP_CLIENT_NAME').'.log';
+        $logfile = base_path() . '/storage/logs/'.$logDate.'-'.getEnv('APP_CLIENT_NAME').'.log';
 
         $log->pushHandler(new StreamHandler($logfile, Logger::WARNING));
 

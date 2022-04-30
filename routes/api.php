@@ -2,7 +2,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\AuthEmployeeController;
+use App\Http\Controllers\AuthManagerController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,7 +14,7 @@ use App\Http\Controllers\AuthEmployeeController;
 |
 */
 Route::group([
-    'prefix' => 'auth',
+    'prefix' => 'user',
     'middleware' => ['assign.guard:api','api'],
 ], function ($router) {
     Route::post('/login', [AuthController::class, 'login']);
@@ -25,12 +25,13 @@ Route::group([
 });
 
 Route::group([
-    'prefix' => 'auth-employee',
-    'middleware' => ['assign.guard:employee','api'],
+    'prefix' => 'manager',
+    'middleware' => ['assign.guard:manager','api'],
 ], function ($router) {
-    Route::post('/login', [AuthEmployeeController::class, 'login']);
-    Route::post('/register', [AuthEmployeeController::class, 'register']);
-    Route::post('/logout', [AuthEmployeeController::class, 'logout']);
-    Route::post('/refresh', [AuthEmployeeController::class, 'refresh']);
-    Route::get('/user-profile', [AuthEmployeeController::class, 'userProfile']);    
+    Route::post('/login', [AuthManagerController::class, 'login']);
+    Route::post('/register', [AuthManagerController::class, 'register']);
+    Route::post('/logout', [AuthManagerController::class, 'logout']);
+    Route::post('/refresh', [AuthManagerController::class, 'refresh']);
+    Route::get('/user-profile', [AuthManagerController::class, 'userProfile']);    
+    Route::get('/logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
 });
